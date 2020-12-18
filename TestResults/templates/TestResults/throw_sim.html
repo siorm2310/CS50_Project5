@@ -1,0 +1,35 @@
+{% extends "TestResults/layout.html" %}
+
+{% block body %}
+<div class="container">
+    <h1>Ballistic Throw simulation</h1>
+    <h2>Enter the following parameters:</h2>
+</div>
+    <hr>
+    <form class="container input-sim-form" method="POST">
+        {% csrf_token %}
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="height">Initial Height:</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" name="height" id="">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="velocity">Initial velocity:</label>
+            <div class="col-sm-10">
+                <input type="number"  class="form-control" name="velocity" id="">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="angle">Initial angle:</label>
+            <div class="col-sm-10">
+                <input type="number"  class="form-control" name="angle" id="">
+            </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Run Simulation!</button>
+    </form>
+
+
+<canvas class="graph-area"></canvas>
+
+{% endblock %}
