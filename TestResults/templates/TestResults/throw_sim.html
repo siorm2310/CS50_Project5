@@ -6,7 +6,7 @@
     <h2>Enter the following parameters:</h2>
 </div>
     <hr>
-    <form class="container input-sim-form" method="POST">
+    <form class="container input-sim-form" method="POST" action="{% url 'simulation_api'%}">
         {% csrf_token %}
         <div class="form-group row">
             <label class="col-sm-2 col-form-label" for="height">Initial Height:</label>
@@ -29,7 +29,9 @@
         <button class="btn btn-primary" type="submit">Run Simulation!</button>
     </form>
 
+<div class="chart-container">
+    <canvas id="graph-area"></canvas>
+</div>
 
-<canvas class="graph-area"></canvas>
 
 {% endblock %}

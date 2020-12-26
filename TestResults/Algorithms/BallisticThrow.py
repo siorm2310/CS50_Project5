@@ -6,12 +6,14 @@ g = 9.81
 class VectorProperty():
     def __init__(self,x_property,y_property):
         self.x = x_property
-        if y_property < 0:
-            self.y = 0
-        else:
-            self.y = y_property
+        self.y = y_property
         self.length = math.sqrt((self.x)**2 + (self.y)**2)
         self.arg = math.tan(self.y/self.x)
+
+    def validate_location(self):
+        if self.y >= 0 and self.length > 1e-5:
+            return True
+        return False
 
 class InitialConditions():
     def __init__(self,x_position,y_position,x_velocity,y_velocity):
@@ -30,4 +32,7 @@ class InitialConditions():
             "Range of Flight [m]" : range_flight,
             "Maximum Height [m]" : h_max
         }
+
+    def create_datapoints(self):
+        pass
 

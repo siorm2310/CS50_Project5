@@ -1,0 +1,14 @@
+{% extends "TestResults/layout.html" %}
+
+{% block body %}
+<h1>Results</h1>
+{% for result in object_list %}
+<table>
+    <tr>
+        <td>{{ table.name }}</td>
+        <td>{{ table.user }}</td>
+        <td>{{ table.datafile }}</td>
+    </tr>
+    
+</table>
+{% endblock %}
