@@ -35,6 +35,7 @@ def register(request):
     if request.method == "POST":
         first_name = request.POST["first_name"]
         last_name = request.POST["last_name"]
+        username = f"{first_name}_{last_name}"
         email = request.POST["email"]
 
         # Ensure password matches confirmation
@@ -47,7 +48,7 @@ def register(request):
 
         # Attempt to create new user
         try:
-            user = User.objects.create_user(username, email, password)
+            user = User.objects.create_user(username, email, password,first_name=first_name,last_name=last_name)
             user.save()
         except IntegrityError:
             return render(request, "TestResults/register.html", {
@@ -60,7 +61,9 @@ def register(request):
 
 
 def index(request):
-    return render(request,"TestResults/throw_sim.html")
+    if "username" in request:
+        return render(request,"TestResults/throw_sim.html")
+    return redirect(reverse("login"))
 
 class ResultsView(ListView):
     model = TestData

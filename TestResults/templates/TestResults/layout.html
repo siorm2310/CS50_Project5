@@ -24,6 +24,19 @@
             </li>
           </ul>
         </div>
+        <div class="navbar-collapse collapse">
+          <ul class="navbar-nav ml-auto">
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout'%}">Log Out</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login'%}">Log In</a>
+            </li>
+            {% endif %}
+          </ul>
+      </div>
       </nav>
     {% block body %}
     {% endblock %}

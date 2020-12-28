@@ -4,11 +4,17 @@ import numpy as np
 g = 9.81
 
 class VectorProperty():
-    def __init__(self,x_property,y_property):
-        self.x = x_property
-        self.y = y_property
-        self.length = math.sqrt((self.x)**2 + (self.y)**2)
-        self.arg = math.tan(self.y/self.x)
+    def __init__(self,x_property,y_property,length=None,arg=None):
+        if length is None:
+            self.x = x_property
+            self.y = y_property
+            self.length = math.sqrt((self.x)**2 + (self.y)**2)
+            self.arg = math.tan(self.y/self.x)
+        else:
+            self.length = length
+            self.arg = arg
+            self.x = length * math.cos(arg)
+            self.y = length * math.sin(arg)
 
     def validate_location(self):
         if self.y >= 0 and self.length > 1e-5:
