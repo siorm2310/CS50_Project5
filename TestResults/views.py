@@ -1,10 +1,11 @@
-from django.shortcuts import render,redirect,reverse
+from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.views.generic import ListView
 from .models import TestData
 from .models import User
 # Create your views here.
+
 
 def login_view(request):
     if request.method == "POST":
@@ -48,7 +49,8 @@ def register(request):
 
         # Attempt to create new user
         try:
-            user = User.objects.create_user(username, email, password,first_name=first_name,last_name=last_name)
+            user = User.objects.create_user(
+                username, email, password, first_name=first_name, last_name=last_name)
             user.save()
         except IntegrityError:
             return render(request, "TestResults/register.html", {
@@ -61,12 +63,14 @@ def register(request):
 
 
 def index(request):
-    if "username" in request:
-        return render(request,"TestResults/throw_sim.html")
+    if request.user.is_authenticated:
+        return render(request, "TestResults/throw_sim.html")
     return redirect(reverse("login"))
+
 
 class ResultsView(ListView):
     model = TestData
+
 
 def simulation_api(request):
     if request.method == "POST":

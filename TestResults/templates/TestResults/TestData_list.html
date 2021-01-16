@@ -5,10 +5,11 @@
 {% for result in object_list %}
 <table>
     <tr>
-        <td>{{ table.name }}</td>
-        <td>{{ table.user }}</td>
-        <td>{{ table.datafile }}</td>
+        <td>{{ result.name }}</td>
+        <td>{{ result.user }}</td>
+        <td>{{ result.datafile }}</td>
     </tr>
     
 </table>
+{% endfor %}
 {% endblock %}
