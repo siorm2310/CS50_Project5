@@ -1,3 +1,14 @@
+    const submitBtn = document.querySelector(".btn")
+
+    submitBtn.addEventListener("click", () => {
+        const data = {
+            "height": document.getElementById("height").innerHTML,
+            "velocity": document.getElementById("velocity").innerHTML,
+            "angle": document.getElementById("angle").innerHTML,
+        }
+        console.log(data);
+    })
+
 var ctx = document.getElementById('graph-area').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',

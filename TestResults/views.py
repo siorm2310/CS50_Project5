@@ -2,8 +2,10 @@ from django.shortcuts import render,redirect,reverse
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.views.generic import ListView
+from django.http import JsonResponse
 from .models import TestData
 from .models import User
+from .Algorithms.BallisticThrow import BallisticThrow
 # Create your views here.
 
 def login_view(request):
@@ -28,7 +30,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect(reverse("index"))
+    return redirect(reverse("login_view"))
 
 
 def register(request):
@@ -61,14 +63,21 @@ def register(request):
 
 
 def index(request):
-    if "username" in request:
+    if request.user.is_authenticated:
         return render(request,"TestResults/throw_sim.html")
     return redirect(reverse("login"))
+
 
 class ResultsView(ListView):
     model = TestData
 
 def simulation_api(request):
-    if request.method == "POST":
-        pass
-    return
+    # if request.method == "POST":
+    #     height = round(float(request.POST["height"]) ,ndigits=2) 
+    #     velocity = round(float(request.POST["velocity"]),ndigits=2)
+    #     angle = round(float(request.POST["angle"]),ndigits=2)
+
+    #     problem = BallisticThrow(0,height,velocity,angle)
+    #     results = problem.calc_landing()
+    # return JsonResponse(results)
+    return JsonResponse({"Hello" : "World"})
