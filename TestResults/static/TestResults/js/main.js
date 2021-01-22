@@ -1,13 +1,28 @@
-    const submitBtn = document.querySelector(".btn")
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+const submitBtn = document.querySelector(".btn")
 
     submitBtn.addEventListener("click", () => {
         const data = {
-            "height": document.getElementById("height").innerHTML,
-            "velocity": document.getElementById("velocity").innerHTML,
-            "angle": document.getElementById("angle").innerHTML,
+            "height": document.getElementById("height").value,
+            "velocity": document.getElementById("velocity").value,
+            "angle": document.getElementById("angle").value,
         }
         console.log(data);
+
+        fetch("../api/submit",{
+        method: 'POST',
+        mode: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify(data)
     })
+    .then(resp => resp.json())
+    .then(data => console.log(data))
+    .catch(err => console.log("Error using fetch",err))
+
+})
 
 var ctx = document.getElementById('graph-area').getContext('2d');
 var myChart = new Chart(ctx, {

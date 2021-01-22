@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
@@ -75,12 +76,14 @@ class ResultsView(ListView):
 
 
 def simulation_api(request):
-    # if request.method == "POST":
-    #     height = round(float(request.POST["height"]) ,ndigits=2) 
-    #     velocity = round(float(request.POST["velocity"]),ndigits=2)
-    #     angle = round(float(request.POST["angle"]),ndigits=2)
+    if request.method == "POST":
+        data = json.loads(request.body)
+        height = float(data["height"])
+        velocity = float(data["velocity"])
+        angle = float(data["angle"])
 
-    #     problem = BallisticThrow(0,height,velocity,angle)
-    #     results = problem.calc_landing()
-    # return JsonResponse(results)
-    return JsonResponse({"Hello" : "World"})
+        problem = BallisticThrow(0,height,velocity,angle)
+        results = problem.calc_landing()
+        return JsonResponse(results)
+
+    return JsonResponse({"Hello": "World"})
