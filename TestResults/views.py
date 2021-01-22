@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect,reverse
+from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.views.generic import ListView
@@ -7,6 +7,7 @@ from .models import TestData
 from .models import User
 from .Algorithms.BallisticThrow import BallisticThrow
 # Create your views here.
+
 
 def login_view(request):
     if request.method == "POST":
@@ -50,7 +51,8 @@ def register(request):
 
         # Attempt to create new user
         try:
-            user = User.objects.create_user(username, email, password,first_name=first_name,last_name=last_name)
+            user = User.objects.create_user(
+                username, email, password, first_name=first_name, last_name=last_name)
             user.save()
         except IntegrityError:
             return render(request, "TestResults/register.html", {
@@ -70,6 +72,7 @@ def index(request):
 
 class ResultsView(ListView):
     model = TestData
+
 
 def simulation_api(request):
     # if request.method == "POST":

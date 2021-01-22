@@ -3,7 +3,7 @@ import numpy as np
 
 
 class VectorProperty():
-    def __init__(self,first_property,second_property,is_polar=False):
+    def __init__(self, first_property, second_property, is_polar=False):
         if not is_polar:
             self.x = first_property
             self.y = second_property
@@ -24,27 +24,43 @@ class VectorProperty():
             return True
         return False
 
+
 class BallisticThrow():
 
     g = 9.81
 
-    def __init__(self,x_position,y_position,velocity,angle):
-        self.location = VectorProperty(x_position,y_position)
-        self.velocity = VectorProperty(velocity,angle,is_polar=True)
+    def __init__(self, x_position, y_position, velocity, angle):
+        self.location = VectorProperty(x_position, y_position)
+        self.velocity = VectorProperty(velocity, angle, is_polar=True)
 
     def calc_landing(self):
         v = self.velocity.magnitude
         theta = self.velocity.arg
         h = self.location.x
-        t_tof = (1/self.g) * (v * math.sin(theta) + math.sqrt(v * (math.sin(theta))**2) + 2 * self.g * h) # Time of flight
+        t_tof = (1/self.g) * (v * math.sin(theta) + math.sqrt(v *
+                                                              (math.sin(theta))**2) + 2 * self.g * h)  # Time of flight
         range_flight = self.location.x + self.velocity.x * t_tof
         h_max = h + v**2 * (math.sin(theta))**2 / (2 * self.g)
         return {
-            "Time" : t_tof,
-            "MaxRange" : range_flight,
-            "MaxHeight" : h_max
+            "Time": t_tof,
+            "MaxRange": range_flight,
+            "MaxHeight": h_max
         }
 
-    def create_datapoints(self):
-        pass
+    def create_datapoints(self, tof_dict):
+        t = np.linspace(0, tof_dict["Time"], num=100)
+        x = []
+        y = []
 
+        for timestep in t:
+            xstep = self.location.x + self.velocity.x * timestep
+            ystep = self.location.y + self.velocity.y * timestep - 0.5 * g * timestep ** 2
+
+            x.append(xstep)
+            y.append(ystep)
+
+        return {
+            "t": t,
+            "x": x,
+            "y": y
+        }
