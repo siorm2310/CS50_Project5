@@ -86,4 +86,4 @@ def simulation_api(request):
         results = problem.calc_landing()
         return JsonResponse(results)
 
-    return JsonResponse({"Hello": "World"})
+    return JsonResponse({"API_endpoint": "BallisticThrow"})

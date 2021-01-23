@@ -37,8 +37,8 @@ class BallisticThrow():
         v = self.velocity.magnitude
         theta = self.velocity.arg
         h = self.location.x
-        t_tof = (1/self.g) * (v * math.sin(theta) + math.sqrt(v *
-                                                              (math.sin(theta))**2) + 2 * self.g * h)  # Time of flight
+        t_tof = (1/self.g) * (v * math.sin(theta) + math.sqrt((v * 
+                                                              math.sin(theta))**2 + 2 * self.g * h))  # Time of flight
         range_flight = self.location.x + self.velocity.x * t_tof
         h_max = h + v**2 * (math.sin(theta))**2 / (2 * self.g)
         return {
@@ -54,7 +54,7 @@ class BallisticThrow():
 
         for timestep in t:
             xstep = self.location.x + self.velocity.x * timestep
-            ystep = self.location.y + self.velocity.y * timestep - 0.5 * g * timestep ** 2
+            ystep = self.location.y + self.velocity.y * timestep - 0.5 * self.g * timestep ** 2
 
             x.append(xstep)
             y.append(ystep)
