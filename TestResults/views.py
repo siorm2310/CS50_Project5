@@ -67,7 +67,7 @@ def register(request):
 
 def index(request):
     if request.user.is_authenticated:
-        return render(request,"TestResults/throw_sim.html")
+        return render(request, "TestResults/throw_sim.html")
     return redirect(reverse("login"))
 
 
@@ -82,8 +82,8 @@ def simulation_api(request):
         velocity = float(data["velocity"])
         angle = float(data["angle"])
 
-        problem = BallisticThrow(0,height,velocity,angle)
-        results = problem.calc_landing()
+        problem = BallisticThrow(0, height, velocity, angle)
+        results = problem.get_data()
         return JsonResponse(results)
 
     return JsonResponse({"API_endpoint": "BallisticThrow"})
