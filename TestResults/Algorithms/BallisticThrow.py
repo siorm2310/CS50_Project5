@@ -42,9 +42,9 @@ class BallisticThrow():
         range_flight = self.location.x + self.velocity.x * t_tof
         h_max = h + v**2 * (math.sin(theta))**2 / (2 * self.g)
         return {
-            "Time": t_tof,
-            "MaxRange": range_flight,
-            "MaxHeight": h_max
+            "Time": round(t_tof,ndigits=2),
+            "MaxRange": round(range_flight,ndigits=2),
+            "MaxHeight":round(h_max,ndigits=2) 
         }
 
     def create_datapoints(self, tof_dict):

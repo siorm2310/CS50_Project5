@@ -1,13 +1,35 @@
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 const submitBtn = document.querySelector(".btn")
 
+function displayResult(dataObject) {
+    document.querySelector(".results-display").innerHTML = 
+    `
+    <table class="table table-bordered">
+    <tr>
+        <td>
+            <b>Time of flight:</b>
+            ${dataObject["Time"]} [sec]
+        </td>
+        <td>
+            <b>Range:</b>
+        ${dataObject["MaxRange"]} [m]
+        </td>
+        <td>
+            <b>Max. Height:</b>
+            ${dataObject["MaxHeight"]} [m]
+        </td>
+    </tr>
+</table>
+    `
+}
+
     submitBtn.addEventListener("click", () => {
-        const data = {
+        const inputData = {
             "height": document.getElementById("height").value,
             "velocity": document.getElementById("velocity").value,
             "angle": document.getElementById("angle").value,
         }
-        console.log(data);
+        console.log(inputData);
 
         fetch("../api/submit",{
         method: 'POST',
@@ -16,10 +38,11 @@ const submitBtn = document.querySelector(".btn")
           'Content-Type': 'application/json',
           'X-CSRFToken': csrftoken
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(inputData)
     })
     .then(resp => resp.json())
-    .then(data => console.log(data))
+    .then(data => displayResult(data))
+    // .then(data => console.log(data))
     .catch(err => console.log("Error using fetch",err))
 
 })
