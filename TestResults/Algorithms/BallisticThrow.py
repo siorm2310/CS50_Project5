@@ -61,9 +61,9 @@ class BallisticThrow():
             y.append(ystep)
 
         return {
-            "t": t,
+            "t": t.tolist(),
             "x": x,
-            "y": y
+            "y": y,
         }
 
     def get_data(self):

@@ -2,6 +2,7 @@ const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 const submitBtn = document.querySelector(".btn")
 
 function displayResult(dataObject) {
+    console.log(dataObject);
     document.querySelector(".results-display").innerHTML = 
     `
     <table class="table table-bordered">
@@ -29,7 +30,6 @@ function displayResult(dataObject) {
             "velocity": document.getElementById("velocity").value,
             "angle": document.getElementById("angle").value,
         }
-        console.log(inputData);
 
         fetch("../api/submit",{
         method: 'POST',
@@ -42,7 +42,6 @@ function displayResult(dataObject) {
     })
     .then(resp => resp.json())
     .then(data => displayResult(data))
-    // .then(data => console.log(data))
     .catch(err => console.log("Error using fetch",err))
 
 })
