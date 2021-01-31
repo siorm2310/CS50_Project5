@@ -1,10 +1,9 @@
-const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-const submitBtn = document.querySelector(".btn")
+const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+const submitBtn = document.querySelector(".btn");
+var ctx = document.getElementById("graph-area").getContext("2d");
 
 function displayResult(dataObject) {
-    console.log(dataObject);
-    document.querySelector(".results-display").innerHTML = 
-    `
+  document.querySelector(".results-display").innerHTML = `
     <table class="table table-bordered">
     <tr>
         <td>
@@ -21,65 +20,83 @@ function displayResult(dataObject) {
         </td>
     </tr>
 </table>
-    `
+    `;
 }
 
-    submitBtn.addEventListener("click", () => {
-        const inputData = {
-            "height": document.getElementById("height").value,
-            "velocity": document.getElementById("velocity").value,
-            "angle": document.getElementById("angle").value,
-        }
+function buildDataPoints(dataObject) {
+    x = dataObject["x"]
+    y = dataObject["y"]
 
-        fetch("../api/submit",{
-        method: 'POST',
-        mode: 'same-origin',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrftoken
-        },
-        body: JSON.stringify(inputData)
+    formattedPoints = x.map(function(element,idx){
+      return {
+        x : element,
+        y : y[idx]
+      }
     })
-    .then(resp => resp.json())
-    .then(data => displayResult(data))
-    .catch(err => console.log("Error using fetch",err))
 
-})
+    return formattedPoints
+}
 
-var ctx = document.getElementById('graph-area').getContext('2d');
-var myChart = new Chart(ctx, {
-    type: 'bar',
+function populateChart(serielizedDataObject) {
+  var myChart = new Chart(ctx, {
+    type: "line",
+
     data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
+      datasets: [
+        {
+          label: "Height Vs. distance [m]",
+          data: serielizedDataObject,
+        },
+      ],
     },
     options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        }
-    }
+      scales: {
+          xAxes: [{
+              ticks: {
+                beginsAtZero : true
+              },
+              type: 'linear',
+              position: 'bottom',
+              stacked: true,
+              suggestedMax: 40
+          }],
+          yAxes :[{
+            ticks: {
+              beginsAtZero : true
+            },
+            type: 'linear',
+            position: 'bottom',
+            stacked: true,
+            suggestedMax: 40
+        }],
+      }
+  }
+  });
+}
+
+  function generateResultsFront(dataObject){
+    displayResult(dataObject)
+    const formattedPoints = buildDataPoints(dataObject)
+    populateChart(formattedPoints)
+  }
+
+submitBtn.addEventListener("click", () => {
+  const inputData = {
+    height: document.getElementById("height").value,
+    velocity: document.getElementById("velocity").value,
+    angle: document.getElementById("angle").value,
+  };
+
+  fetch("../api/submit", {
+    method: "POST",
+    mode: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": csrftoken,
+    },
+    body: JSON.stringify(inputData),
+  })
+    .then((resp) => resp.json())
+    .then((data) => generateResultsFront(data))
+    .catch((err) => console.log("Error using fetch", err));
 });

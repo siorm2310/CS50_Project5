@@ -36,7 +36,7 @@ class BallisticThrow():
     def calc_landing(self):
         v = self.velocity.magnitude
         theta = self.velocity.arg
-        h = self.location.x
+        h = self.location.y
         t_tof = (1/self.g) * (v * math.sin(theta) + math.sqrt((v *
                                                                math.sin(theta))**2 + 2 * self.g * h))  # Time of flight
         range_flight = self.location.x + self.velocity.x * t_tof
@@ -48,17 +48,16 @@ class BallisticThrow():
         }
 
     def create_datapoints(self, tof_dict):
-        t = np.linspace(0, tof_dict["Time"], num=100)
+        t = np.linspace(0, tof_dict["Time"], num=20)
         x = []
         y = []
 
         for timestep in t:
             xstep = self.location.x + self.velocity.x * timestep
-            ystep = self.location.y + self.velocity.y * \
-                timestep - 0.5 * self.g * timestep ** 2
+            ystep = self.location.y + self.velocity.y * timestep - 0.5 * self.g * timestep ** 2
 
-            x.append(xstep)
-            y.append(ystep)
+            x.append(round(xstep,ndigits=3))
+            y.append(round(ystep,ndigits=3))
 
         return {
             "t": t.tolist(),
