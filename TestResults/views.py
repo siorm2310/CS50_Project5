@@ -3,10 +3,10 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.views.generic import ListView
-from django.http import JsonResponse
-from .models import TestData
-from .models import User
+from django.http import JsonResponse,HttpResponse
+from .models import TestData,User
 from .Algorithms.BallisticThrow import BallisticThrow
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 
@@ -75,7 +75,7 @@ class ResultsView(ListView):
     model = TestData
 
 
-def simulation_api(request):
+def submit_sim(request):
     if request.method == "POST":
         data = json.loads(request.body)
         height = float(data["height"])
@@ -87,3 +87,13 @@ def simulation_api(request):
         return JsonResponse(results)
 
     return JsonResponse({"API_endpoint": "BallisticThrow"})
+
+@csrf_exempt # Temp! remove after validation
+def record_sim(request):
+    if request.method == "POST":
+        # data = json.loads(request.body)
+
+        # data_entry = TestData()
+        return HttpResponse(status=200)
+    return HttpResponse(status=500)
+

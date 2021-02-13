@@ -2,6 +2,12 @@ const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
 const submitBtn = document.querySelector(".btn");
 var ctx = document.getElementById("graph-area").getContext("2d");
 
+let latestSimData ;
+
+function updateLatestData(dataObject){
+  latestSimData = dataObject;
+}
+
 function displayResult(dataObject) {
   document.querySelector(".results-display").innerHTML = `
     <table class="table table-bordered">
@@ -20,6 +26,7 @@ function displayResult(dataObject) {
         </td>
     </tr>
 </table>
+<button class="btn btn-primary" id="saveBtn" >Save results</button>
     `;
 }
 
@@ -75,6 +82,7 @@ function populateChart(serielizedDataObject) {
 }
 
   function generateResultsFront(dataObject){
+    updateLatestData(dataObject)
     displayResult(dataObject)
     const formattedPoints = buildDataPoints(dataObject)
     populateChart(formattedPoints)
@@ -99,4 +107,21 @@ submitBtn.addEventListener("click", () => {
     .then((resp) => resp.json())
     .then((data) => generateResultsFront(data))
     .catch((err) => console.log("Error using fetch", err));
+
+    document.getElementById("saveBtn").onclick(()=> {
+      fetch("../api/record",{
+        method: "POST",
+        mode: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrftoken,
+        },
+        body: JSON.stringify(latestSimData)
+      })
+    })
+    .then(resp => console.log(resp))
+    // .then((resp) => resp.json())
+    // .then(status => status === 200 ? true : false) // ?
+    .catch((err) => console.log("Error using fetch", err));
 });
+
